@@ -17,11 +17,12 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements View.OnClickListener{
 
     //ArrayList<Element> elementList;
     ArrayList<ElementView> elementList;
     RelativeLayout rl;
+    private static final String TAG = "MainActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +45,8 @@ public class MainActivity extends Activity {
             case 0:
                 Toast.makeText(this,"new task",Toast.LENGTH_SHORT).show();
                 ElementView ev = new ElementView(this);
-
+                ev.setId(elementList.size());
+                ev.setOnClickListener(this);
                 elementList.add(ev);
 
                 rl.addView(ev);
@@ -63,5 +65,8 @@ public class MainActivity extends Activity {
     }
 
 
-
+    @Override
+    public void onClick(View view) {
+        Toast.makeText(this,"clicked:"+view.getId(), Toast.LENGTH_SHORT).show();
+    }
 }
