@@ -8,9 +8,10 @@ import android.graphics.Rect;
 public class Element {
     public Rect rect;
 
-    Element(){}
+    Element() {
+    }
 
-    Element(Rect _r){
+    Element(Rect _r) {
         rect = _r;
     }
 

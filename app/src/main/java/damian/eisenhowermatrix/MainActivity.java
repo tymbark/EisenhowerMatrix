@@ -1,28 +1,26 @@
 package damian.eisenhowermatrix;
 
 import android.app.Activity;
-import android.graphics.Rect;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.DragEvent;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Button;
-import android.widget.LinearLayout;
+import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 
 
-public class MainActivity extends Activity implements View.OnClickListener{
+public class MainActivity extends Activity implements View.OnClickListener {
 
-    //ArrayList<Element> elementList;
+    ArrayList<String> elementNames;
     ArrayList<ElementView> elementList;
     RelativeLayout rl;
     private static final String TAG = "MainActivity";
+    String newName = new String("");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +28,8 @@ public class MainActivity extends Activity implements View.OnClickListener{
         setContentView(R.layout.activity_main);
         rl = (RelativeLayout) findViewById(R.id.mainView);
         elementList = new ArrayList<ElementView>();
+        elementNames = new ArrayList<String>();
+        rl.setBackgroundResource(R.drawable.background);
     }
 
 
@@ -41,9 +41,9 @@ public class MainActivity extends Activity implements View.OnClickListener{
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch(item.getItemId()){
+        switch (item.getItemId()) {
             case 0:
-                Toast.makeText(this,"new task",Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "new task", Toast.LENGTH_SHORT).show();
                 ElementView ev = new ElementView(this);
                 ev.setId(elementList.size());
                 ev.setOnClickListener(this);
@@ -65,8 +65,33 @@ public class MainActivity extends Activity implements View.OnClickListener{
     }
 
 
+
     @Override
     public void onClick(View view) {
-        Toast.makeText(this,"clicked:"+view.getId(), Toast.LENGTH_SHORT).show();
+        ElementView ev = (ElementView) view;
+        final int ID = view.getId();
+        if (!ev.isClicked())
+            return;
+        Toast.makeText(this, "clicked:" + view.getId(), Toast.LENGTH_SHORT).show();
+        ev.setClicked(false);
+
+        AlertDialog.Builder newNameBox = new AlertDialog.Builder(this);
+        newNameBox.setCancelable(true);
+        newNameBox.setMessage("set name");
+        final EditText et = new EditText(this);
+        newNameBox.setView(et);
+        newNameBox.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                setElementViewText(et.getText().toString(), ID);
+            }
+        });
+        newNameBox.show();
+
     }
+
+    void setElementViewText(String s, int ID){
+        elementList.get(ID).setText(s);
+        }
+
 }
